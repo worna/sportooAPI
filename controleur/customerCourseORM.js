@@ -116,7 +116,7 @@ module.exports.getCoursesOfCustomer = async (req, res) => {
                         email
                     },
                 }
-                courses.push({course});
+                courses.push(course);
             }
             res.json(courses);
         } else {
