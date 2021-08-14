@@ -109,8 +109,8 @@ module.exports.getCoursesOfCustomer = async (req, res) => {
                         id_room,
                         max_capacity,
                     },
-                    starting_date_time: starting_date_time.toLocaleString(),
-                    ending_date_time: ending_date_time.toLocaleString(),
+                    starting_date_time: starting_date_time.toISOString(),
+                    ending_date_time: ending_date_time.toISOString(),
                     level: level,
                     activity: activity,
                     instructor: {
