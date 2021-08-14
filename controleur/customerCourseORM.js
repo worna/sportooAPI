@@ -101,7 +101,10 @@ module.exports.getCoursesOfCustomer = async (req, res) => {
                 const {last_name, first_name, email} = instructorDB;
                 const course = {
                     id: id,
-                    sportHall: name,
+                    sportHall: {
+                        id_sport_hall,
+                        name,
+                    },
                     room: {
                         id_room,
                         max_capacity,
