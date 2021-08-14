@@ -94,7 +94,7 @@ module.exports.getCoursesOfCustomer = async (req, res) => {
                 const courseDB = await CourseORM.findOne({where: {id: courseOfCustomer.id_course}});
                 const {id, id_sport_hall, id_room, starting_date_time, ending_date_time, level, activity, instructor} = courseDB;
                 const sportHall = await SportHallORM.findOne({where: {id: id_sport_hall}});
-                const {name} = sportHall;
+                const {name, city_name, zip_code, country, address} = sportHall;
                 const room = await RoomORM.findOne({where: {id_room: id_room, id_sport_hall: id_sport_hall}});
                 const {max_capacity} = room;
                 const instructorDB = await CustomerORM.findOne({where: {email: instructor}});
@@ -104,6 +104,10 @@ module.exports.getCoursesOfCustomer = async (req, res) => {
                     sportHall: {
                         id_sport_hall,
                         name,
+                        city_name,
+                        zip_code,
+                        address,
+                        country,
                     },
                     room: {
                         id_room,
