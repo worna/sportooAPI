@@ -143,6 +143,71 @@ module.exports.getCoursesOfCustomer = async (req, res) => {
     }
 }
 
+module.exports.getNextCoursesOfCustomer = async (req, res) => {
+    const email = req.params.email;
+    try{
+        const customerDB = await CustomerORM.findOne({where: {email: email}});
+        if(customerDB === null){
+            throw new Error("Customer not found");
+        }
+        const coursesOfCustomer = await CustomerCourseORM.findAll({where: {email_customer: email}});
+        if(coursesOfCustomer !== null){
+            const courses = [];
+            const today = new Date();
+            for (const courseOfCustomer of coursesOfCustomer) {
+                const courseDB = await CourseORM.findOne({where: {id: courseOfCustomer.id_course}});
+                const {id, id_sport_hall, id_room, starting_date_time, ending_date_time, level, activity, instructor} = courseDB;
+                if(ending_date_time.getTime() > today.getTime()) {
+                    const sportHall = await SportHallORM.findOne({where: {id: id_sport_hall}});
+                    const {name} = sportHall;
+                    const room = await RoomORM.findOne({where: {id_room: id_room, id_sport_hall: id_sport_hall}});
+                    const {max_capacity} = room;
+                    const instructorDB = await CustomerORM.findOne({where: {email: instructor}});
+                    const {last_name, first_name, email} = instructorDB;
+                    const course = {
+                        id: id,
+                        sportHall: {
+                            id_sport_hall,
+                            name,
+                        },
+                        room: {
+                            id_room,
+                            max_capacity,
+                        },
+                        starting_date_time: Date.parse(starting_date_time),
+                        ending_date_time: Date.parse(ending_date_time),
+                        level: level,
+                        activity: activity,
+                        instructor: {
+                            last_name,
+                            first_name,
+                            email
+                        },
+                    }
+                    courses.push(course);
+                }
+            }
+            courses.sort(function (a, b) {
+                return new Date(b.starting_date_time) - new Date(a.starting_date_time);
+            })
+            res.json(courses);
+        } else {
+            throw new Error("No course found");
+        }
+    } catch (error){
+        console.log(error);
+        if(error.message === "Customer not found"){
+            res.status(404).send("The customer with this email is not found");
+        } else if (error.message === "No course found"){
+            res.status(404).send("No course found for this cutomer");
+        }
+        else {
+            res.sendStatus(500);
+        }
+
+    }
+}
+
 /**
  *@swagger
  *components:
