@@ -159,7 +159,7 @@ module.exports.getNextCoursesOfCustomer = async (req, res) => {
                 const {id, id_sport_hall, id_room, starting_date_time, ending_date_time, level, activity, instructor} = courseDB;
                 if(ending_date_time.getTime() > today.getTime()) {
                     const sportHall = await SportHallORM.findOne({where: {id: id_sport_hall}});
-                    const {name} = sportHall;
+                    const {name, city_name, zip_code, country, address} = sportHall;
                     const room = await RoomORM.findOne({where: {id_room: id_room, id_sport_hall: id_sport_hall}});
                     const {max_capacity} = room;
                     const instructorDB = await CustomerORM.findOne({where: {email: instructor}});
