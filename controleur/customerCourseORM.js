@@ -169,13 +169,17 @@ module.exports.getNextCoursesOfCustomer = async (req, res) => {
                         sportHall: {
                             id_sport_hall,
                             name,
+                            city_name,
+                            zip_code,
+                            address,
+                            country,
                         },
                         room: {
                             id_room,
                             max_capacity,
                         },
-                        starting_date_time: Date.parse(starting_date_time),
-                        ending_date_time: Date.parse(ending_date_time),
+                        starting_date_time: starting_date_time.toISOString(),
+                        ending_date_time: ending_date_time.toISOString(),
                         level: level,
                         activity: activity,
                         instructor: {
