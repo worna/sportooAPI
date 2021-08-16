@@ -64,6 +64,9 @@ router.get('/course/:id', JWTMiddleWare.identification, AuthoMiddleware.mustBeAd
  */
 router.get('/customer/:email', JWTMiddleWare.identification, AuthoMiddleware.isMyAccountOrAdmin, CustomerCourseControleur.getCoursesOfCustomer);
 
+router.get('/customer/next/:email', JWTMiddleWare.identification, AuthoMiddleware.isMyAccountOrAdmin, CustomerCourseControleur.getNextCoursesOfCustomer);
+
+
 /**
  * @swagger
  * /customerCourse:
