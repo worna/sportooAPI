@@ -64,6 +64,8 @@ router.get('/sportHall/:id', JWTMiddleWare.identification, AuthoMiddleware.mustB
  */
 router.get('/customer/:email', JWTMiddleWare.identification, AuthoMiddleware.mustBeAdmin, SportHallCustomerControleur.getSportHallsOfCustomer);
 
+router.post('/exist', JWTMiddleWare.identification, AuthoMiddleware.isMyAccountOrAdmin,SportHallCustomerControleur.haveCustomersInSportHall);
+
 /**
  * @swagger
  * /sportHallCustomer:
