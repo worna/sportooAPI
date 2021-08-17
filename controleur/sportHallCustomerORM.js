@@ -4,6 +4,35 @@ const SportHallORM = require("../ORM/model/SportHall");
 const sequelize = require("../ORM/sequelize");
 const {Sequelize} = require("sequelize");
 
+module.exports.haveCustomersInSportHall = async (req, res) => {
+    const {email, sport_hall} = req.body;
+    const id = parseInt(sport_hall);
+    try{
+        if(isNaN(id)){
+            console.log("The id is not a number");
+            res.sendStatus(400);
+        } else {
+            const sportHallDB = await SportHallORM.findOne({where: {id: id}});
+            if(sportHallDB === null){
+                throw new Error("Sport hall id not valid");
+            }
+            const customerDB = await CustomerORM.findOne({where: {email: email}});
+            if(sportHallDB === null){
+                throw new Error("Customer not found");
+            }
+            const customersInSportHall = await SportHallCustomerORM.findOne({where: {id_sport_hall: id,email_customer: email}});
+            if(customersInSportHall !== null){
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+        }
+    } catch (error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
 
 /**
  * @swagger
