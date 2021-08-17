@@ -68,7 +68,7 @@ module.exports.getSportHall = async (req, res) => {
                     managerObj = null;
                 }
                 res.json({
-                    id,
+                    id_sport_hall: id,
                     name,
                     manager: managerObj,
                     phone_number,
@@ -127,7 +127,7 @@ module.exports.getSportHalls = async (req, res) => {
                     managerObj = null;
                 }
                 const sportHall = {
-                    id,
+                    id_sport_hall: id,
                     name,
                     manager: managerObj,
                     phone_number,
