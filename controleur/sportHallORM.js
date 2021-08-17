@@ -131,7 +131,7 @@ module.exports.getSportHalls = async (req, res) => {
                     name,
                     manager: managerObj,
                     phone_number,
-                    email_sh,
+                    email: email_sh,
                     address,
                     city_name,
                     zip_code,
