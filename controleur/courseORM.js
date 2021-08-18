@@ -6,6 +6,74 @@ const RoomORM = require('../ORM/model/Room');
 const sequelize = require("../ORM/sequelize");
 const {Op, Sequelize} = require("sequelize");
 
+module.exports.getSportHallCourses = async (req, res) => {
+    const idTexte = req.params.id;
+    const id = parseInt(idTexte)
+
+    try{
+        if(isNaN(id)){
+            console.log("The id is not a number");
+            res.sendStatus(400);
+        } else {
+            const coursesDB = await CourseORM.findAll({where: {id_sport_hall: id}});
+            if (coursesDB !== null) {
+                const courses = [];
+                for (const courseDB of coursesDB) {
+                    const {
+                        id,
+                        id_sport_hall,
+                        id_room,
+                        starting_date_time,
+                        ending_date_time,
+                        level,
+                        activity,
+                        instructor
+                    } = courseDB;
+                    const sportHall = await SportHallORM.findOne({where: {id: id_sport_hall}});
+                    const {name, city_name, zip_code, country, address} = sportHall;
+                    const room = await RoomORM.findOne({where: {id_room: id_room, id_sport_hall: id_sport_hall}});
+                    const {max_capacity} = room;
+                    if (instructor !== null) {
+                        const instructorDB = await CustomerORM.findOne({where: {email: instructor}});
+                        const {last_name, first_name, email} = instructorDB;
+                        instructorObj = {last_name, first_name, email};
+                    } else {
+                        instructorObj = null;
+                    }
+
+                    const course = {
+                        id: id,
+                        sportHall: {
+                            id_sport_hall,
+                            name,
+                            city_name,
+                            zip_code,
+                            address,
+                            country,
+                        },
+                        room: {
+                            id_room,
+                            max_capacity,
+                        },
+                        starting_date_time: starting_date_time.toISOString(),
+                        ending_date_time: ending_date_time.toLocaleString(),
+                        level: level,
+                        activity: activity,
+                        instructor: instructorObj
+                    }
+                    courses.push(course);
+
+                }
+                res.json(courses);
+            }
+        }
+    } catch (error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
+
 
 /**
  * @swagger
