@@ -18,6 +18,7 @@ module.exports.getSportHallCourses = async (req, res) => {
             const coursesDB = await CourseORM.findAll({where: {id_sport_hall: id}});
             if (coursesDB !== null) {
                 const courses = [];
+                const today = new Date();
                 for (const courseDB of coursesDB) {
                     const {
                         id,
