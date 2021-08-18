@@ -29,41 +29,46 @@ module.exports.getSportHallCourses = async (req, res) => {
                         activity,
                         instructor
                     } = courseDB;
-                    const sportHall = await SportHallORM.findOne({where: {id: id_sport_hall}});
-                    const {name, city_name, zip_code, country, address} = sportHall;
-                    const room = await RoomORM.findOne({where: {id_room: id_room, id_sport_hall: id_sport_hall}});
-                    const {max_capacity} = room;
-                    if (instructor !== null) {
-                        const instructorDB = await CustomerORM.findOne({where: {email: instructor}});
-                        const {last_name, first_name, email} = instructorDB;
-                        instructorObj = {last_name, first_name, email};
-                    } else {
-                        instructorObj = null;
-                    }
+                    if(ending_date_time.getTime() > today.getTime()) {
+                        const sportHall = await SportHallORM.findOne({where: {id: id_sport_hall}});
+                        const {name, city_name, zip_code, country, address} = sportHall;
+                        const room = await RoomORM.findOne({where: {id_room: id_room, id_sport_hall: id_sport_hall}});
+                        const {max_capacity} = room;
+                        if (instructor !== null) {
+                            const instructorDB = await CustomerORM.findOne({where: {email: instructor}});
+                            const {last_name, first_name, email} = instructorDB;
+                            instructorObj = {last_name, first_name, email};
+                        } else {
+                            instructorObj = null;
+                        }
 
-                    const course = {
-                        id: id,
-                        sportHall: {
-                            id_sport_hall,
-                            name,
-                            city_name,
-                            zip_code,
-                            address,
-                            country,
-                        },
-                        room: {
-                            id_room,
-                            max_capacity,
-                        },
-                        starting_date_time: starting_date_time.toISOString(),
-                        ending_date_time: ending_date_time.toLocaleString(),
-                        level: level,
-                        activity: activity,
-                        instructor: instructorObj
+                        const course = {
+                            id: id,
+                            sportHall: {
+                                id_sport_hall,
+                                name,
+                                city_name,
+                                zip_code,
+                                address,
+                                country,
+                            },
+                            room: {
+                                id_room,
+                                max_capacity,
+                            },
+                            starting_date_time: starting_date_time.toISOString(),
+                            ending_date_time: ending_date_time.toISOString(),
+                            level: level,
+                            activity: activity,
+                            instructor: instructorObj
+                        }
+                        courses.push(course);
                     }
-                    courses.push(course);
 
                 }
+                courses.sort(function (a, b) {
+                return new Date(b.starting_date_time) - new Date(a.starting_date_time);
+            })
                 res.json(courses);
             }
         }
@@ -212,8 +217,8 @@ module.exports.getCourses = async (req, res) => {
                         id_room,
                         max_capacity,
                     },
-                    starting_date_time: starting_date_time.toLocaleString(),
-                    ending_date_time: ending_date_time.toLocaleString(),
+                    starting_date_time: starting_date_time.toISOString(),
+                    ending_date_time: ending_date_time.toISOString(),
                     level: level,
                     activity: activity,
                     instructor: instructorObj
