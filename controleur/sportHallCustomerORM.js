@@ -221,9 +221,9 @@ module.exports.getSportHallsOfCustomer = async (req, res) => {
  *          description: The sporthall customer has been deleted
  */
 module.exports.deleteSportHallCustomer = async (req, res) => {
-    const {sportHall, customer} = req.body;
+    const {email, sport_hall} = req.body;
     try{
-        await SportHallCustomerORM.destroy({where: {id_sport_hall: sportHall, email_customer: customer}});
+        await SportHallCustomerORM.destroy({where: {id_sport_hall: sport_hall, email_customer: email}});
         res.sendStatus(204);
     } catch (error){
         console.log(error);
