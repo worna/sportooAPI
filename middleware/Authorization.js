@@ -72,6 +72,9 @@ module.exports.isMyAccount = (req, res, next) => {
  *          description: The requested action can only be performed by the owner of this account or an administrator
  */
 module.exports.isMyAccountOrAdmin = (req, res, next) => {
+    console.log("session" + req.session.email);
+    console.log("param" + req.params.email);
+    console.log("It's must be your account");
     if(req.session && (req.session.authLevel === "admin" || req.session.email === req.params.email || req.session.email === req.body.email_customer || req.session.email === req.body.email)){
         next();
     } else {
