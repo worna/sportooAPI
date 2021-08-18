@@ -85,22 +85,22 @@ module.exports.haveCustomersInSportHall = async (req, res) => {
  *                          - customer
  */
 module.exports.postSportHallCustomer = async (req, res) => {
-    const {sportHall, customer} = req.body;
+    const {email, sport_hall} = req.body;
     try{
         await sequelize.transaction( {
             deferrable:  Sequelize.Deferrable.SET_DEFERRED
         }, async (t) => {
-            const sportHallDB = await SportHallORM.findOne({where: {id: sportHall}});
+            const sportHallDB = await SportHallORM.findOne({where: {id: sport_hall}});
             if(sportHallDB === null){
                 throw new Error("Sport not found");
             }
-            const customerDB = await CustomerORM.findOne({where: {email: customer}});
+            const customerDB = await CustomerORM.findOne({where: {email: email}});
             if(customerDB === null){
                 throw new Error("Customer not found");
             }
             await SportHallCustomerORM.create({
-                id_sport_hall: sportHall,
-                email_customer: customer
+                id_sport_hall: sport_hall,
+                email_customer: email
             }, {transaction: t});
         });
         res.sendStatus(201);
