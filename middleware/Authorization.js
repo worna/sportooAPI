@@ -56,7 +56,7 @@ module.exports.mustBeAdmin = (req, res, next) => {
  *          description: The requested action can only be performed by the owner of this account
  */
 module.exports.isMyAccount = (req, res, next) => {
-    if(req.session && req.session.email === req.body.email){
+    if(req.session && (req.session.email === req.body.email || req.session.email === req.body.email_customer)){
         next();
     } else {
         console.log("It's must be your account");
