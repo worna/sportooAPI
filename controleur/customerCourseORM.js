@@ -18,7 +18,7 @@ module.exports.haveCustomersInCourse = async (req, res) => {
             if(courseDB === null){
                 throw new Error("Course id not valid");
             }
-            const customerDB = await CustomerORM.findOne({where: {email: email}});
+            const customerDB = await CustomerORM.findOne({where: {email: email_customer}});
             if(customerDB === null){
                 throw new Error("Customer not found");
             }
