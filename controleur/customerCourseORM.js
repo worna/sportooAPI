@@ -6,6 +6,35 @@ const RoomORM = require('../ORM/model/Room');
 const sequelize = require("../ORM/sequelize");
 const {Sequelize} = require("sequelize");
 
+module.exports.haveCustomersInCourse = async (req, res) => {
+    const {email_customer, id_course} = req.body;
+    const id = parseInt(id_course);
+    try{
+        if(isNaN(id)){
+            console.log("The id is not a number");
+            res.sendStatus(400);
+        } else {
+            const courseDB = await CourseORM.findOne({where: {id: id}});
+            if(courseDB === null){
+                throw new Error("Course id not valid");
+            }
+            const customerDB = await CustomerORM.findOne({where: {email: email}});
+            if(customerDB === null){
+                throw new Error("Customer not found");
+            }
+            const customersInCourse = await CustomerCourseORM.findOne({where: {id_course: id_course,email_customer: email_customer}});
+            if(customersInCourse !== null){
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+        }
+    } catch (error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
 
 /**
  * @swagger
