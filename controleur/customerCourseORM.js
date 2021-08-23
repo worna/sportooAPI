@@ -264,22 +264,22 @@ module.exports.getNextCoursesOfCustomer = async (req, res) => {
  *
  */
 module.exports.postCustomerCourse = async (req, res) => {
-    const {email, course} = req.body;
+     const {email_customer, id_course} = req.body;
     try{
         await sequelize.transaction( {
             deferrable:  Sequelize.Deferrable.SET_DEFERRED
         }, async (t) => {
-            const customerDB = await CustomerORM.findOne({where: {email: email}});
+            const customerDB = await CustomerORM.findOne({where: {email: email_customer}});
             if(customerDB === null){
                 throw new Error("Customer email not valid");
             }
-            const courseDB = await CourseORM.findOne({where: {id: course}});
+            const courseDB = await CourseORM.findOne({where: {id: id_course}});
             if(courseDB === null){
                 throw new Error("Course id not valid");
             }
             await CustomerCourseORM.create({
-                email_customer: email,
-                id_course: course
+                email_customer: email_customer,
+                id_course: id_course
             }, {transaction: t});
         });
         res.sendStatus(201);
