@@ -274,9 +274,9 @@ module.exports.postCustomerCourse = async (req, res) => {
  *          description: The customer course has been deleted
  */
 module.exports.deleteCustomerCourse = async (req, res) => {
-    const {email_customer, course} = req.body;
+    const {email_customer, id_course} = req.body;
     try{
-        await CustomerCourseORM.destroy({where: {email_customer: email_customer, id_course: course}});
+        await CustomerCourseORM.destroy({where: {email_customer: email_customer, id_course: id_course}});
         res.sendStatus(204);
     } catch (error){
         console.log(error);
