@@ -4,6 +4,9 @@ const AuthoMiddleware = require("../middleware/Authorization");
 const Router = require("express-promise-router");
 const router = new Router;
 
+
+router.post('/exist',SportHallCustomerControleur.haveCustomersInCourse);
+
 /**
  * @swagger
  * /customerCourse/course/{id}:
