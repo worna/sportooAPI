@@ -5,7 +5,7 @@ const Router = require("express-promise-router");
 const router = new Router;
 
 
-router.post('/exist',SportHallCustomerControleur.haveCustomersInCourse);
+router.post('/exist',CustomerCourseControleur.haveCustomersInCourse);
 
 /**
  * @swagger
